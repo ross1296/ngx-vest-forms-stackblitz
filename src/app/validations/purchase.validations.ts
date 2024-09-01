@@ -32,20 +32,25 @@ export const createPurchaseValidationSuite = (swapiService: SwapiService) => {
 
     test('firstName', 'First name is required', () => {
       enforce(model.firstName).isNotBlank();
+      enforce(model.firstName).isNotNull();
     });
     test('lastName', 'Last name is required', () => {
       enforce(model.lastName).isNotBlank();
+      enforce(model.lastName).isNotNull();
     });
     test('age', 'Age is required', () => {
       enforce(model.age).isNotBlank();
+      enforce(model.age).isNotNull();
     });
     omitWhen((model.age || 0) >= 18, () => {
       test('emergencyContact', 'Emergency contact is required', () => {
         enforce(model.emergencyContact).isNotBlank();
+        enforce(model.emergencyContact).isNotNull();
       });
     });
     test('gender', 'Gender is required', () => {
       enforce(model.gender).isNotBlank();
+      enforce(model.gender).isNotNull();
     });
     omitWhen(model.gender !== 'other', () => {
       test(
@@ -58,9 +63,11 @@ export const createPurchaseValidationSuite = (swapiService: SwapiService) => {
     });
     test('productId', 'Product is required', () => {
       enforce(model.productId).isNotBlank();
+      enforce(model.productId).isNotNull();
     });
     test('passwords.password', 'Password is not filled in', () => {
       enforce(model.passwords?.password).isNotBlank();
+      enforce(model.passwords?.password).isNotNull();
     });
     omitWhen(!model.passwords?.password, () => {
       test(
@@ -68,6 +75,7 @@ export const createPurchaseValidationSuite = (swapiService: SwapiService) => {
         'Confirm password is not filled in',
         () => {
           enforce(model.passwords?.confirmPassword).isNotBlank();
+          enforce(model.passwords?.confirmPassword).isNotNull();
         }
       );
     });
