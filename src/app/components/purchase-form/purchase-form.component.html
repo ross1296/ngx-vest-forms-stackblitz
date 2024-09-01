@@ -1,73 +1,3 @@
-<div
-  class="sm:col-span-2 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
->
-  <h3 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">
-    <strong>ngx-vest-forms</strong> DEMO
-  </h3>
-  Check out the package here:
-  <a href="https://www.npmjs.com/package/ngx-vest-forms">https://www.npmjs.com/package/ngx-vest-forms</a>
-  <br/>
-  <br/>
-  <p><strong>This demo contains:</strong></p>
-  <ul class="text-md list-disc ml-4">
-    <li>Show validation errors on blur</li>
-    <li>Show validation errors on submit</li>
-    <li>When first name is <strong>Brecht</strong>: Set gender to male</li>
-    <li>
-      When first name is <strong>Brecht</strong> and last name is
-      <strong>Billiet</strong>: Set age and passwords
-    </li>
-    <li>
-      When first name is <strong>Luke</strong>: Fetch
-      <strong>Luke Skywalker from the swapi api</strong>
-    </li>
-    <li>When age is below 18, make Emergency contact required</li>
-    <li>When age is of legal age, disable Emergency contact</li>
-    <li>There should be at least one phone number</li>
-    <li>Phone numbers should not be empty</li>
-    <li>When gender is <strong>other</strong>, show Specify gender</li>
-    <li>When gender is <strong>other</strong>, make Specify gender required</li>
-    <li>Password is required</li>
-    <li>Confirm password is only required when password is filled in</li>
-    <li>Passwords should match, but only check if both are filled in</li>
-    <li>Billing address is required</li>
-    <li>Show shipping address only when needed (otherwise remove from DOM)</li>
-    <li>
-      If shipping address is different from billing address, make it required
-    </li>
-    <li>
-      If shipping address is different from billing address, make sure they are
-      not the same
-    </li>
-    <li>
-      When providing shipping address and toggling the checkbox back and forth,
-      make sure the state is kept
-    </li>
-    <li>
-      When clicking the Fetch data button, load data, disable the form, and
-      patch and re-enable the form
-    </li>
-    <li>When the user id is taken, perform async validation</li>
-    <li>
-      Try to set the firstName to Brecht lastName to Billiet, Now change the age
-      to 30. It shows how we can do validations on the root
-    </li>
-  </ul>
-  <button class="mt-6" (click)="fetchData()">Fetch data</button>
-  <br />
-</div>
-
-<pre>{{ vm.errors?.['rootForm'] }}</pre>
-
-@if (vm.errors?.['rootForm']) {
-  <div
-    class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-    role="alert"
-  >
-    {{ vm.errors?.['rootForm'] }}
-  </div>
-}
-
 <form
   class="mt-8"
   scVestForm
@@ -138,10 +68,6 @@
           name="emergencyContact"
         />
       </label>
-    </div>
-    <div class="sm:col-span-2" sc-control-wrapper ngModelGroup="phonenumbers">
-      <phonenumbers [values]="vm.formValue.phonenumbers?.values || {}">
-      </phonenumbers>
     </div>
     <div
       class="sm:col-span-2 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
@@ -231,38 +157,9 @@
         </select>
       </label>
     </div>
-    <div class="sm:col-span-2" sc-control-wrapper ngModelGroup="addresses">
-      <div sc-control-wrapper ngModelGroup="billingAddress">
-        <h3 class="text-2xl">Billing address</h3>
-        <address [address]="vm.formValue.addresses?.billingAddress"></address>
-      </div>
-      <label sc-control-wrapper>
-        <span>Shipping address is different from billing address</span>
-        <input
-          type="checkbox"
-          [ngModel]="
-            vm.formValue.addresses?.shippingAddressDifferentFromBillingAddress
-          "
-          name="shippingAddressDifferentFromBillingAddress"
-        />
-      </label>
-      @if (vm.showShippingAddress) {
-        <div sc-control-wrapper ngModelGroup="shippingAddress">
-          <h3 class="text-2xl">Shipping Address</h3>
-          <address [address]="vm.shippingAddress"></address>
-        </div>
-      }
-    </div>
     <div class="buttons">
       <button type="button">Reset</button>&nbsp;
       <button type="submit">Submit</button>
     </div>
   </fieldset>
 </form>
-<br />
-<p>Valid: {{ vm.formValid }}</p>
-
-<h3>The value of the form</h3>
-<pre id="json-data">
-  {{ vm.formValue | json }}
-</pre>

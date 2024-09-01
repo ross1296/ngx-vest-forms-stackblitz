@@ -1,19 +1,16 @@
-import { Component, computed, effect, inject, signal } from '@angular/core';
 import { JsonPipe } from '@angular/common';
-import { ProductService } from '../../product.service';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { ValidateRootFormDirective, vestForms } from 'ngx-vest-forms';
+import { debounceTime, filter, switchMap } from 'rxjs';
+import { LukeService } from '../../luke.service';
 import {
   PurchaseFormModel,
   purchaseFormShape,
 } from '../../models/purchaseFormModel';
-import { AddressComponent } from '../address/address.component';
-import { debounceTime, filter, switchMap } from 'rxjs';
-import { LukeService } from '../../luke.service';
-import { PhonenumbersComponent } from '../phonenumbers/phonenumbers.component';
-import { AddressModel } from '../../models/address.model';
-import { createPurchaseValidationSuite } from '../../validations/purchase.validations';
-import { vestForms, ValidateRootFormDirective } from 'ngx-vest-forms';
+import { ProductService } from '../../product.service';
 import { SwapiService } from '../../swapi.service';
+import { createPurchaseValidationSuite } from '../../validations/purchase.validations';
 
 @Component({
   selector: 'purchase-form',
@@ -21,8 +18,6 @@ import { SwapiService } from '../../swapi.service';
   imports: [
     JsonPipe,
     vestForms,
-    AddressComponent,
-    PhonenumbersComponent,
     ValidateRootFormDirective,
   ],
   templateUrl: './purchase-form.component.html',
@@ -33,12 +28,11 @@ export class PurchaseFormComponent {
   private readonly swapiService = inject(SwapiService);
   private readonly productService = inject(ProductService);
   public readonly products = toSignal(this.productService.getAll());
-  protected readonly formValue = signal<PurchaseFormModel>({});
+  protected readonly formValue = signal<PurchaseFormModel>(null!);
   protected readonly formValid = signal<boolean>(false);
   protected readonly loading = signal<boolean>(false);
   protected readonly errors = signal<Record<string, string>>({});
   protected readonly suite = createPurchaseValidationSuite(this.swapiService);
-  private readonly shippingAddress = signal<AddressModel>({});
   protected readonly shape = purchaseFormShape;
   private readonly viewModel = computed(() => {
     return {
@@ -46,12 +40,7 @@ export class PurchaseFormComponent {
       errors: this.errors(),
       formValid: this.formValid(),
       emergencyContactDisabled: (this.formValue().age || 0) >= 18,
-      showShippingAddress:
-        this.formValue().addresses?.shippingAddressDifferentFromBillingAddress,
       showGenderOther: this.formValue().gender === 'other',
-      // Take shipping address from the state
-      shippingAddress:
-        this.formValue().addresses?.shippingAddress || this.shippingAddress(),
       loading: this.loading(),
     };
   });
@@ -106,11 +95,6 @@ export class PurchaseFormComponent {
 
   protected setFormValue(v: PurchaseFormModel): void {
     this.formValue.set(v);
-
-    // Keep shipping address in the state
-    if (v.addresses?.shippingAddress) {
-      this.shippingAddress.set(v.addresses.shippingAddress);
-    }
   }
 
   protected get vm() {

@@ -1,5 +1,3 @@
-import { AddressModel, addressShape } from './address.model';
-import { PhonenumberModel, phonenumberShape } from './phonenumber.model';
 import { DeepPartial, DeepRequired } from 'ngx-vest-forms';
 
 export type PurchaseFormModel = DeepPartial<{
@@ -12,15 +10,9 @@ export type PurchaseFormModel = DeepPartial<{
     password: string;
     confirmPassword?: string;
   };
-  phonenumbers: PhonenumberModel;
   gender: 'male' | 'female' | 'other';
   genderOther: string;
   productId: string;
-  addresses: {
-    shippingAddress: AddressModel;
-    billingAddress: AddressModel;
-    shippingAddressDifferentFromBillingAddress: boolean;
-  };
 }>;
 
 export const purchaseFormShape: DeepRequired<PurchaseFormModel> = {
@@ -29,16 +21,11 @@ export const purchaseFormShape: DeepRequired<PurchaseFormModel> = {
   lastName: '',
   age: 0,
   emergencyContact: '',
-  addresses: {
-    shippingAddress: addressShape,
-    billingAddress: addressShape,
-    shippingAddressDifferentFromBillingAddress: true,
-  },
+  
   passwords: {
     password: '',
     confirmPassword: '',
   },
-  phonenumbers: phonenumberShape,
   gender: 'other',
   genderOther: '',
   productId: '',
