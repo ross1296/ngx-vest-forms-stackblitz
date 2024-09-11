@@ -9,7 +9,7 @@
   [validationConfig]="validationConfig"
   (validChange)="formValid.set($event)"
   (errorsChange)="errors.set($event)"
-  (formValueChange)="setFormValue($event)"
+  (formValueChange)="updatedFormValue.set($event)"
 >
   <fieldset [disabled]="vm.loading">
     <h1 class="text-4xl">Purchase form</h1>
